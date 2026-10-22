@@ -1,0 +1,21 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/aegisops_notifications}
+    username: ${SPRING_DATASOURCE_USERNAME:aegisops}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    listener:
+      simple:
+        default-requeue-rejected: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

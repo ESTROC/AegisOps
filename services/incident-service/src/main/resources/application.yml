@@ -1,0 +1,39 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/aegisops}
+    username: ${SPRING_DATASOURCE_USERNAME:aegisops}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+app:
+  legacy-soap-url: ${APP_LEGACY_SOAP_URL:http://localhost:8083/ws}
+  jwt:
+    secret: ${APP_JWT_SECRET:}
+    issuer: aegisops
+  bootstrap:
+    username: ${APP_BOOTSTRAP_USERNAME:}
+    password: ${APP_BOOTSTRAP_PASSWORD:}

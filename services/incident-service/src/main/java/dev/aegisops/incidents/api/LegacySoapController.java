@@ -19,7 +19,7 @@ public class LegacySoapController {
  @GetMapping("/api/tickets/{id}/legacy-health")
  public Map<String,String> legacyStatus(@PathVariable Long id){
   String service=tickets.get(id).serviceName();
-  String escaped=service.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace(""","&quot;");
+  String escaped=service.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;");
   String envelope="""
    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:leg="https://aegisops.dev/legacy">
    <soapenv:Header/><soapenv:Body><leg:GetServiceHealthRequest><leg:serviceName>%s</leg:serviceName></leg:GetServiceHealthRequest></soapenv:Body>

@@ -158,3 +158,13 @@ MIT. Project is independent, educational and synthetic/demo-only. No proprietary
 ### Spring Boot release lifecycle
 
 Spring Boot 3.5.16 was the final open-source maintenance release of the 3.5 series (June 2026). This portfolio version is pinned for compatibility with Spring Boot 3-era APIs. **Before internet-facing production use, upgrade to a currently OSS-supported Spring Boot branch and retest all integrations.**
+
+## Quality engineering and optional integration extensions (P0–P2)
+
+- **P0 browser QA:** Playwright UI/API workflows and Selenium Java WebDriver smoke tests; see [quality engineering](docs/QUALITY_ENGINEERING.md) and CI workflows under `.github/workflows`.
+- **P1 Kafka:** Optional, mutually exclusive Kafka event transport; default RabbitMQ mode is unchanged. See [Kafka operations](docs/KAFKA_SPLUNK_OPERATIONS.md).
+- **P1 Splunk:** ECS structured JSON logs, request correlation and an opt-in Splunk HEC Docker logging override. Requires an external Splunk endpoint.
+- **P1 MySQL:** Flyway indexes for ticket pagination and comments; compare synthetic EXPLAIN ANALYZE plans using `scripts/db-profile.sql`.
+- **P2 release:** [Release readiness checklist](docs/RELEASE_CHECKLIST.md), trace artifacts and an explicit no-fabricated-metrics policy.
+
+Integrations require passing GitHub CI and service smoke tests before being described as validated; external Kafka/Splunk infrastructure is not assumed.

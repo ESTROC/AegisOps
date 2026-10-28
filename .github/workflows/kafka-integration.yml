@@ -1,0 +1,37 @@
+name: Optional Kafka transport integration
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  kafka-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      BOOTSTRAP_ADMIN_USERNAME: admin
+      BOOTSTRAP_ADMIN_PASSWORD: Synthetic-CI-Password-2026-Safe!
+      MYSQL_PASSWORD: replace-with-unique-app-password
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up ephemeral local test credentials
+        run: |
+          cp .env.example .env
+          sed -i 's/^BOOTSTRAP_ADMIN_PASSWORD=.*/BOOTSTRAP_ADMIN_PASSWORD=Synthetic-CI-Password-2026-Safe!/' .env
+      - name: Start Kafka-mode services
+        run: docker compose -f compose.yaml -f compose.kafka.yaml up --build -d
+      - name: Wait until API is healthy
+        run: |
+          for n in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:8088/actuator/health | grep -q UP; then exit 0; fi
+            sleep 4
+          done
+          docker compose -f compose.yaml -f compose.kafka.yaml ps
+          docker compose -f compose.yaml -f compose.kafka.yaml logs --tail=80
+          exit 1
+      - name: Validate Kafka delivery to MySQL notification store
+        run: bash scripts/kafka-smoke.sh
+      - name: Save logs on failure
+        if: failure()
+        run: docker compose -f compose.yaml -f compose.kafka.yaml logs --tail=120
+      - name: Clean up
+        if: always()
+        run: docker compose -f compose.yaml -f compose.kafka.yaml down -v --remove-orphans

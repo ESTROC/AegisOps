@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   kafka-smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 35
     env:
       BOOTSTRAP_ADMIN_USERNAME: admin

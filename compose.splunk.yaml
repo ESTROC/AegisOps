@@ -1,0 +1,23 @@
+# Opt-in Splunk HEC log shipping through Docker's Splunk logging driver.
+# Requires a reachable HTTPS Splunk HEC endpoint, valid token and trusted CA.
+# Example: docker compose -f compose.yaml -f compose.splunk.yaml up -d
+# Do NOT commit credentials or enable on local QA without access to HEC.
+services:
+  incident-service:
+    logging:
+      driver: splunk
+      options:
+        splunk-url: "${SPLUNK_HEC_URL:?Set SPLUNK_HEC_URL to your HTTPS HEC endpoint}"
+        splunk-token: "${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN securely}"
+        splunk-format: json
+        splunk-sourcetype: _json
+        tag: "{{.Name}}"
+  notification-service:
+    logging:
+      driver: splunk
+      options:
+        splunk-url: "${SPLUNK_HEC_URL:?Set SPLUNK_HEC_URL to your HTTPS HEC endpoint}"
+        splunk-token: "${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN securely}"
+        splunk-format: json
+        splunk-sourcetype: _json
+        tag: "{{.Name}}"

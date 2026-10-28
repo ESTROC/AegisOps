@@ -3,10 +3,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import org.springframework.amqp.core.Message;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 @Component
+@ConditionalOnProperty(name="app.events.transport",havingValue="rabbit",matchIfMissing=true)
 public class TicketEventListener {
  private final ReceivedEventRepository repo;private final ObjectMapper mapper;
  public TicketEventListener(ReceivedEventRepository repo,ObjectMapper mapper){this.repo=repo;this.mapper=mapper;}
